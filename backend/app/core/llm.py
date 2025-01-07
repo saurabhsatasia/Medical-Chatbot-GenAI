@@ -15,7 +15,12 @@ class LLMManager:
             model_type=self.model_type,
             config={
                 'max_new_tokens': 512,
-                'temperature': 0.8
+                'temperature': 0.7,        # Reduced from 0.8 for more focused responses
+                'top_p': 0.9,             # Added top_p for better text generation
+                'top_k': 50,              # Added top_k for more diverse sampling
+                'repetition_penalty': 1.2, # Added to prevent repetitions
+                'stop': ['<|end|>'],      # Added stop token
+                'context_length': 2048,    # Added context length
             }
         )
         return self.llm
@@ -34,6 +39,7 @@ class LLMManager:
             chain_type="stuff",
             retriever=retriever,
             return_source_documents=True,
-            chain_type_kwargs={"prompt": prompt}
+            chain_type_kwargs={"prompt": prompt,
+                               "verbose": True}  # Added for debugging
         )
         return self.qa_chain

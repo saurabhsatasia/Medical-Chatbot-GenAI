@@ -5,3 +5,7 @@ from typing import List
 class ChatResponse:
     answer: str
     sources: List[str]
+
+@dataclass
+class ErrorResponse:
+    detail: str

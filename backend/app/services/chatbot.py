@@ -29,12 +29,19 @@ class ChatbotService:
         prompt_template = """
         Use the following pieces of information to answer the user's question.
         If you don't know the answer, just say that you don't know, don't try to make up an answer.
+        
+        Guidelines:
+        - Provide a clear, concise answer
+        - Avoid repeating words or phrases
+        - Use natural, flowing language
+        - Stay focused on the question
+        - If the source text contains repetitions, summarize it clearly
 
         Context: {context}
         Question: {question}
 
         Only return the helpful answer below and nothing else.
-        Helpful answer:
+        Helpful answer (be concise and avoid repetitions):
         """
 
         self.qa_chain = self.llm_manager.create_qa_chain(
