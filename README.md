@@ -1,67 +1,83 @@
-# Medical Chatbot Backend
+# Medical Chatbot
 
-A FastAPI-based backend for a medical chatbot that uses LangChain and Pinecone for processing and retrieving medical information from "The GALE ENCYCLOPEDIA of MEDICINE".
+A full-stack medical chatbot application that uses FastAPI, React, and LangChain to provide medical information from "The GALE ENCYCLOPEDIA of MEDICINE".
+
+![Medical Chatbot Screenshot](./screenshot.png)
 
 ## Features
 
+### Backend
 - FastAPI REST API
 - LangChain for document processing and QA chain
 - Pinecone vector store for efficient document retrieval
 - PDF document loading and processing
 - Modular and OOP-based architecture
 
+### Frontend
+- Modern React.js with Vite
+- Elegant UI with shadcn/ui components
+- Dark/Light theme support
+- Real-time chat interface
+- Source attribution for responses
+- Responsive design
+
 ## Project Structure
 
 ```
 Medical-Chatbot-GenAI/
-│   .gitignore
-│   LICENSE
-│   README.md
+├── README.md
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ui/            # shadcn components
+│   │   │   ├── ChatInput.jsx
+│   │   │   ├── ChatMessage.jsx
+│   │   │   ├── ChatWindow.jsx
+│   │   │   ├── ThemeToggle.jsx
+│   │   │   └── theme-provider.jsx
+│   │   ├── lib/
+│   │   │   └── api.js
+│   │   └── App.jsx
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
 │
-└───backend/
-    │   .env
-    │   requirements.txt
-    │
-    ├───app/
-    │   │   main.py
-    │   │
-    │   ├───api/
-    │   │   └───endpoints/
-    │   │           chat.py
-    │   │
-    │   ├───config/
-    │   │       settings.py
-    │   │
-    │   ├───core/
-    │   │       document_loader.py
-    │   │       embeddings.py
-    │   │       llm.py
-    │   │       pinecone_store.py
-    │   │
-    │   ├───models/
-    │   │       schemas.py
-    │   │
-    │   └───services/
-    │           chatbot.py
-    │
-    ├───data/
-    │       medical_book.pdf
-    │
-    ├───model/
-    │       llama-2-7b-chat.ggmlv3.q4_0.bin
-    │
-    └───research/
-            trials.ipynb
+└── backend/
+    ├── app/
+    │   ├── main.py
+    │   ├── api/
+    │   │   └── endpoints/
+    │   │       └── chat.py
+    │   ├── config/
+    │   │   └── settings.py
+    │   ├── core/
+    │   │   ├── document_loader.py
+    │   │   ├── embeddings.py
+    │   │   ├── llm.py
+    │   │   └── pinecone_store.py
+    │   ├── models/
+    │   │   └── schemas.py
+    │   └── services/
+    │       └── chatbot.py
+    ├── data/
+    │   └── medical_book.pdf
+    ├── model/
+    │   └── llama-2-7b-chat.ggmlv3.q4_0.bin
+    └── requirements.txt
+
 ```
 
 ## Prerequisites
 
 - Python 3.8
+- Node.js 16+ and npm
 - Pinecone API key
 - The GALE ENCYCLOPEDIA of MEDICINE PDF document
 - LLama model file (llama-2-7b-chat.ggmlv3.q4_0.bin)
 
 ## Installation
+
+### Backend Setup
 
 1. Clone the repository:
 ```bash
@@ -80,33 +96,52 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the backend directory with your Pinecone API key:
+4. Create a `.env` file in the backend directory:
 ```
 PINECONE_API_KEY=your-api-key-here
 ```
 
-5. Place your medical encyclopedia PDF in the data directory:
+5. Set up data and model:
 ```bash
-mkdir data
-# Copy your PDF file to the data directory
+mkdir data model
+# Copy medical_book.pdf to data directory
+# Copy llama-2-7b-chat.ggmlv3.q4_0.bin to model directory
 ```
 
-6. Place the LLama model file in the model directory:
+### Frontend Setup
+
+1. Navigate to the frontend directory:
 ```bash
-mkdir model
-# Copy llama-2-7b-chat.ggmlv3.q4_0.bin to the model directory
+cd ../frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Update the API URL in `src/lib/api.js` if needed:
+```javascript
+const API_BASE_URL = 'http://localhost:8000/api/v1';
 ```
 
 ## Running the Application
 
-1. Start the FastAPI server:
+1. Start the backend server:
 ```bash
+cd backend
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-2. Access the API documentation:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+2. Start the frontend development server:
+```bash
+cd frontend
+npm run dev
+```
+
+3. Access the application:
+- Frontend: http://localhost:5173
+- API Documentation: http://localhost:8000/docs
 
 ## API Endpoints
 
@@ -114,7 +149,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 Send a medical question to the chatbot.
 
-Request body:
+Request:
 ```json
 {
   "question": "What is diabetes?"
@@ -131,8 +166,8 @@ Response:
 
 ## Configuration
 
-Key configuration options in `app/config.py`:
-
+### Backend Configuration
+Key settings in `app/config/settings.py`:
 ```python
 MODEL_PATH: str = "model/llama-2-7b-chat.ggmlv3.q4_0.bin"
 MODEL_TYPE: str = "llama"
@@ -141,12 +176,49 @@ INDEX_NAME: str = "medibot"
 DATA_PATH: str = "../data/"
 ```
 
+### Frontend Configuration
+Theme configuration in `src/index.css`:
+```css
+:root {
+  /* Light theme variables */
+}
+
+.dark {
+  /* Dark theme variables */
+}
+```
+
+## Features Showcase
+
+### Chat Interface
+- Real-time message updates
+- User messages appear on the right (blue)
+- Bot responses appear on the left with sources
+- Loading indicators for responses
+- Smooth scrolling chat history
+
+### Theme Support
+- Light/Dark mode toggle
+- Persistent theme preference
+- Smooth theme transitions
+
+### Responsive Design
+- Mobile-friendly interface
+- Adaptive layout
+- Accessible on all screen sizes
+
 ## Development
 
 ### Adding New Features
 
+#### Backend
 1. Create new endpoints in `app/api/endpoints/`
-2. Add new core functionality in `core/`
-3. Create corresponding services in `services/`
-4. Update models in `models/` if needed
+2. Add core functionality in `core/`
+3. Create services in `services/`
+4. Update models in `models/`
 
+#### Frontend
+1. Add new components in `src/components/`
+2. Update API client in `src/api.js`
+3. Modify theme in `src/index.css`
+4. Add new pages in `src/pages/`

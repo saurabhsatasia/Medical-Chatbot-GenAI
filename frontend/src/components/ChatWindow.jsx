@@ -1,31 +1,35 @@
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardContent } from "@/components/ui/card";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
-import { LoadingDots } from "./LoadingDots";
+// import { LoadingDots } from "./LoadingDots";
+import { Loader2 } from "lucide-react";
 
 export function ChatWindow({ messages, onSendMessage, isLoading }) {
     return (
-        <Card className="w-full max-w-2xl mx-auto h-[600px] flex flex-col">
-            <ScrollArea className="flex-1 p-4">
-                {messages.map((message) => (
-                    <ChatMessage key={message.id} message={message} />
-                ))}
-                {isLoading && (
-                    <div className='flex justify-center mb-4'>
-                        <Card className='bg-muted'>
-                            <CardContent className='p-4'>
-                                <LoadingDots />
-                            </CardContent>
-                        </Card>
-
-                    </div>
-                )}
+        <div className="flex flex-col">
+            <ScrollArea className="h-[600px] mb-4">
+                <div className="space-y-4 pr-4">
+                    {messages.map((message) => (
+                        <ChatMessage key={message.id} message={message} />
+                    ))}
+          
+                    {isLoading && (
+                        <div className="flex justify-start">
+                            <div className="bg-muted rounded-lg p-3">
+                                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                            </div>
+                        </div>
+                    )}
+                </div>
             </ScrollArea>
-            <div className="p-4 border-t">
+
+            <div className="pt-4 border-t">
                 <ChatInput onSendMessage={onSendMessage} disabled={isLoading} />
+                <p className="mt-2 text-xs text-muted-foreground text-center">
+                    For informational purposes only. Consult a healthcare professional for medical advice.
+                </p>
             </div>
-        </Card>
+        </div>
     );
   }

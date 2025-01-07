@@ -1,27 +1,37 @@
 import React from "react";
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { Loader2 } from "lucide-react";
+// import { Card, CardContent } from '@/components/ui/card';
+import { cn } from "@/lib/utils";
 
 export function ChatMessage({ message }) {
+    const isBot = message.role === 'assistant';
+
     return (
-        <div className={cn(
-            "felx gap-3 mb-4", message.role === "user" ? "justify-end" : "justify-start"
-        )}>
-            <Card className={cn(
-                'max-w-[80%]', message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+        <div className={`flex ${isBot ? 'justify-start' : 'justify-end'} mb-4`}>
+            <div className={cn(
+                "rounded-lg p-3 max-w-[80%]",
+                isBot ? "bg-gray-700 text-gray-100" : "bg-blue-600 text-white"
             )}>
-                <CardContent className='p-3'>
-                    <p>{message.content}</p>
-                    {message.sources && message.sources.length > 0 && (
-                        <div className="mt-2 text-sm opacity-80">
-                            <p className="font-semibold">Sources:</p>
-                            {message.sources.map((source, index) => (
-                                <p key={index} className="text-xs">{source}</p>
-                            ))}
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
+                {isBot && (
+                    <div className="flex items-center space-x-2 mb-1">
+                        <span className="h-6 w-6 rounded-full bg-blue-600 flex items-center justify-center">
+                            <span className="text-white text-sm">🤖</span>
+                        </span>
+                        <span className="font-medium text-gray-200">Medical Bot</span>
+                    </div>
+                )}
+
+                <p>{message.content}</p>
+
+                {isBot && message.sources && message.sources.length > 0 && (
+                    <div className="mt-2 text-xs text-gray-400">
+                        <p className="font-semibold">Sources:</p>
+                        {message.sources.map((source, index) => (
+                            <p key={index}>{source}</p>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
